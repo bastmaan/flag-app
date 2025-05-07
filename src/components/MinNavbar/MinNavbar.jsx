@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppBar, Box, Typography, IconButton, Container, Button } from '@mui/material';
+import { AppBar, Box, Typography, Container, Button } from '@mui/material';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import { ThemeContext } from '../../context/ThemeContext';
 import darkLogo from '../../assets/techover-logo-dark.png'; // Importera din mörka logotyp här
@@ -10,7 +10,7 @@ const MinNavbar = () => {
 
   return (
     <Box>
-      <AppBar position="fixed" sx={{ width: '100%', height: 64, backgroundColor: (theme) => theme.palette.background.paper, color: (theme) => theme.palette.text.primary }}>
+      <AppBar position="fixed" sx={{ width: '100%', height: {xs: 56, md: 64} , backgroundColor: (theme) => theme.palette.background.paper, color: (theme) => theme.palette.text.primary }}>
         <Container
           maxWidth="lg"
           sx={{
@@ -26,15 +26,15 @@ const MinNavbar = () => {
               The Flag App
             </Typography>
           </Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
           <img
             src={darkMode ? lightLogo : darkLogo}
             alt="Logo"
             style={{ height: 24 }}
           />
+          </Box>
           <Button onClick={toggleTheme} color="inherit" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <IconButton >
               {darkMode ? <Brightness7 /> : <Brightness4 />}
-            </IconButton>
             <Typography variant="body1"> 
               {/* FIXA MED STORLEKEN PÅ TEXTEN FÖR ATT PASSA DESIGNEN */}
               {darkMode ? 'DARK MODE' : 'LIGHT MODE'}
