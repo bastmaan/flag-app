@@ -24,6 +24,7 @@ export const ThemeContextProvider = ({ children }) => {
             styleOverrides: {
               body: {
                 transition: 'none',
+                overflowY: 'scroll !important', // 👈 detta lägger till den tvingande scrollbaren
               },
             },
           },

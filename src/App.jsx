@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeContextProvider } from './context/ThemeContext';
 import MinNavbar from './components/MinNavbar/MinNavbar';
+import SkeletonLoaders from './components/skeletonLoaders/skeletonLoaders';
+import './App.css';
 
 const App = () => {
   return (
     <ThemeContextProvider>
       <MinNavbar />
-      <Outlet /> {/* Här renderas HomePage */}
+      <Suspense fallback={<SkeletonLoaders />}>
+        <Outlet /> {/* Här renderas HomePage */}
+      </Suspense>
     </ThemeContextProvider>
   );
 };

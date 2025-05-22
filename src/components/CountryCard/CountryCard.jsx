@@ -1,24 +1,44 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const CountryCard = ({ country }) => {
+  const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
   // Safety check for country data
   if (!country) return null;
 
+  const handleClick = () => {
+    navigate(`/country/${encodeURIComponent(country.name)}`);
+  };
+
   return (
-    <Card sx={{ 
-      width: { xs: '345px', md: '264px' },
-      height: { xs: '266.5px', md: '266px' },
-      display: 'flex',
-      flexDirection: 'column',
-      boxShadow: '0px 0px 8px 2px rgba(0, 0, 0, 0.3)',
-      '&:hover': {
+    <Card 
+      onClick={handleClick}
+      sx={{ 
+        width: { xs: '345px', md: '264px' },
+        height: { xs: '266.5px', md: '266px' },
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '0px 0px 8px 2px rgba(0, 0, 0, 0.3)',
+        position: 'relative',
         cursor: 'pointer',
-        '& .MuiCardContent-root': {
-          bgcolor: 'rgba(255, 255, 255, 0.05)'
+        '&:hover': {
+          cursor: 'pointer',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '140px',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0, 0, 0, 0.05)',
+            zIndex: 1
+          }
         }
-      }
-    }}>
+      }}
+    >
       <Box sx={{ 
         width: { xs: '345px', md: '264px' },
         height: '140px',
@@ -46,6 +66,8 @@ const CountryCard = ({ country }) => {
         pl: '16px',
         pr: 0,
         pb: 0,
+        position: 'relative',
+        zIndex: 2,
         '&:last-child': {
           pb: 0
         }

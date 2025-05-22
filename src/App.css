@@ -3,7 +3,9 @@
   margin: 0;
   padding: 0;
 }
-
-.card {
-  will-change: transform;
+html, body {
+  overflow-x: hidden;
+}
+body {
+  overflow-y: scroll !important;
 }

@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 import { AppBar, Box, Typography, Container, Button } from '@mui/material';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import { ThemeContext } from '../../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 import darkLogo from '../../assets/techover-logo-dark.png'; // Importera din mörka logotyp här
 import lightLogo from '../../assets/techover-logo.png'; // Importera din ljusa logotyp här
 
 const MinNavbar = () => {
   const { darkMode, toggleTheme } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ 
