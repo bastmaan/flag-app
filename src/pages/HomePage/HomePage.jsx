@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Box, Grid, useTheme, Container } from '@mui/material';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import SkeletonLoaders from '../../components/skeletonLoaders/skeletonLoaders';
+import SkeletonLoaders from '../../components/SkeletonLoaders/SkeletonLoaders';
 import CountryCard from '../../components/CountryCard/CountryCard';
 import RegionFilter from '../../components/RegionFilter/RegionFilter';
 
