@@ -79,7 +79,7 @@ const HomePage = () => {
               onSearchChange={handleSearchChange}
             />
             <RegionFilter 
-              selectedRegion={selectedRegion} 
+              selectedRegion={selectedRegion}
               onRegionChange={handleRegionChange} 
             />
           </Box>
