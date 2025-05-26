@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Chip, Button, CircularProgress, Grid, Paper } from '@mui/material';
+import { Box, Typography, Chip, Button, Grid, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import CountrySkeletonLoader from '../../components/SkeletonLoaders/CountrySkeletonLoader';
 
@@ -48,7 +48,7 @@ const CountryPage = () => {
     : '-';
 
   return (
-    <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default, left: 0, top: 10, position: 'fixed'}}>
+    <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default, left: 0, top: 10, position: { xs: 'relative', md: 'fixed' } }}>
       <Box sx={{ maxWidth: '1154px', mx: 'auto', mt: 8, px: 3 }}>
         <Button onClick={() => navigate(-1)} sx={{ mb: 6, color: theme.palette.text.primary, borderColor: theme.palette.text.primary, marginTop: 4, fontWeight: 600, fontSize: 16, '&:hover': { borderColor: theme.palette.text.primary, bgcolor: theme.palette.action.hover } }}>
           &#8592; Back

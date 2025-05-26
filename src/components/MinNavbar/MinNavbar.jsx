@@ -13,12 +13,12 @@ const MinNavbar = () => {
   return (
     <Box sx={{ 
       width: '100%',
-      position: 'absolute',
+      position: { xs: 'fixed', md: 'absolute' },
       top: 0,
       left: 0,
       right: 0,
       backgroundColor: (theme) => theme.palette.background.paper,
-      zIndex: 1
+      zIndex: 10
     }}>
       <Container maxWidth="lg" sx={{ height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

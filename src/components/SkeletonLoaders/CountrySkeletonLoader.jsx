@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 const CountrySkeletonLoader = () => {
   const theme = useTheme();
   return (
-    <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default, left: 0, top: 10, position: 'fixed' }}>
+    <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default, left: 0, top: 10, position: { xs: 'relative', md: 'fixed' } }}>
       <Box sx={{ maxWidth: '1154px', mx: 'auto', mt: 8, px: 3 }}>
         <Skeleton variant="rectangular" width={1000} height={40} sx={{ mb: 6, borderRadius: 2 }} />
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, flexWrap: 'wrap', gap: { xs: 6, md: 4 }, alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>

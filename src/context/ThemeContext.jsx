@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo } from 'react';
+import React, { createContext, useState, useMemo, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material';
 
 export const ThemeContext = createContext();
@@ -24,7 +24,9 @@ export const ThemeContextProvider = ({ children }) => {
             styleOverrides: {
               body: {
                 transition: 'none',
-                overflowY: 'scroll !important', // 👈 detta lägger till den tvingande scrollbaren
+                overflowY: 'scroll !important',
+                margin: 0,
+                backgroundColor: darkMode ? '#202C36' : '#F2F2F2',
               },
             },
           },
@@ -71,6 +73,11 @@ export const ThemeContextProvider = ({ children }) => {
   const toggleTheme = () => {
     setDarkMode((prevMode) => !prevMode);
   };
+
+  useEffect(() => {
+    document.body.classList.toggle('darkmode', darkMode);
+    document.body.classList.toggle('lightmode', !darkMode);
+  }, [darkMode]);
 
   return (
     <ThemeContext.Provider value={{ darkMode, toggleTheme }}>
