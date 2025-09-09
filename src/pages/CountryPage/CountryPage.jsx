@@ -14,21 +14,63 @@ const CountryPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true`)
-      .then(res => res.json())
-      .then(async data => {
-        const c = data[0];
-        setCountry(c);
-        // Hämta grannländers namn
-        if (c.borders && c.borders.length > 0) {
-          const bordersRes = await fetch(`https://restcountries.com/v3.1/alpha?codes=${c.borders.join(',')}`);
-          const bordersData = await bordersRes.json();
-          setBorderCountries(bordersData.map(b => b.name.common));
-        } else {
-          setBorderCountries([]);
+    
+    const fetchCountryData = async () => {
+      const endpoints = [
+        `https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true&fields=name,flags,population,region,capital,borders,currencies,languages,tld`,
+        `https://restcountries.com/v3/name/${encodeURIComponent(countryName)}?fullText=true&fields=name,flags,population,region,capital,borders,currencies,languages,tld`,
+        `https://restcountries.com/v2/name/${encodeURIComponent(countryName)}?fullText=true&fields=name,flag,population,region,capital,borders,currencies,languages,topLevelDomain`
+      ];
+      
+      for (const endpoint of endpoints) {
+        try {
+          console.log(`Trying country endpoint: ${endpoint}`);
+          const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          console.log('Country data received:', data);
+          
+          if (data && data.length > 0) {
+            const c = data[0];
+            setCountry(c);
+            
+            // Hämta grannländers namn
+            if (c.borders && c.borders.length > 0) {
+              try {
+                const bordersRes = await fetch(`https://restcountries.com/v3.1/alpha?codes=${c.borders.join(',')}&fields=name`);
+                const bordersData = await bordersRes.json();
+                setBorderCountries(bordersData.map(b => b.name?.common || b.name || 'Unknown'));
+              } catch (borderError) {
+                console.error('Error fetching border countries:', borderError);
+                setBorderCountries([]);
+              }
+            } else {
+              setBorderCountries([]);
+            }
+            setLoading(false);
+            return; // Success, exit the loop
+          }
+        } catch (error) {
+          console.error(`Error with endpoint ${endpoint}:`, error);
         }
-        setLoading(false);
-      });
+      }
+      
+      // If all endpoints fail
+      console.error('All country API endpoints failed');
+      setLoading(false);
+    };
+    
+    fetchCountryData();
   }, [countryName]);
 
   if (loading || !country) {

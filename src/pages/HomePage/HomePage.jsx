@@ -14,19 +14,85 @@ const HomePage = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch('https://restcountries.com/v3.1/all')
-            .then(res => res.json())
-            .then(data => {
-                const formatted = data.map((country) => ({
-                    name: country.name.common,
-                    flag: country.flags.svg,
-                    population: country.population,
-                    region: country.region,
-                    capital: country.capital ? country.capital[0] : 'N/A',
-                }));
+        
+        // Try multiple API endpoints with field specification
+        const apiEndpoints = [
+            'https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital',
+            'https://restcountries.com/v3/all?fields=name,flags,population,region,capital',
+            'https://restcountries.com/v2/all?fields=name,flag,population,region,capital'
+        ];
+        
+        const tryFetch = async (endpoint) => {
+            try {
+                console.log(`Trying endpoint: ${endpoint}`);
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                console.log(`Response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log(`API data received from ${endpoint}:`, data.length, 'countries');
+                console.log('First country sample:', data[0]);
+                
+                // Check if data has the expected structure
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error('Invalid data structure received');
+                }
+                
+                const formatted = data.map((country) => {
+                    // Handle different possible flag structures
+                    let flagUrl = '';
+                    if (country.flags) {
+                        // For v3.1 and v3, prefer svg, fallback to png
+                        flagUrl = country.flags.svg || country.flags.png || '';
+                    } else if (country.flag) {
+                        // For v2, use the flag field directly
+                        flagUrl = country.flag;
+                    }
+                    
+                    console.log(`Country: ${country.name?.common || country.name}, Flag URL: ${flagUrl}`);
+                    
+                    return {
+                        name: country.name?.common || country.name || 'Unknown',
+                        flag: flagUrl,
+                        population: country.population || 0,
+                        region: country.region || 'Unknown',
+                        capital: country.capital ? (Array.isArray(country.capital) ? country.capital[0] : country.capital) : 'N/A',
+                    };
+                });
+                
+                console.log('Formatted countries:', formatted.slice(0, 3));
                 setCountries(formatted);
                 setLoading(false);
-            });
+                return true; // Success
+                
+            } catch (error) {
+                console.error(`Error with endpoint ${endpoint}:`, error);
+                return false; // Failed
+            }
+        };
+        
+        // Try each endpoint until one works
+        const attemptFetch = async () => {
+            for (const endpoint of apiEndpoints) {
+                const success = await tryFetch(endpoint);
+                if (success) return;
+            }
+            // If all endpoints fail
+            console.error('All API endpoints failed');
+            setLoading(false);
+        };
+        
+        attemptFetch();
     }, []);
 
     const handleRegionChange = (region) => {

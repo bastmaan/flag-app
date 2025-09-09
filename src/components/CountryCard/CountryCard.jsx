@@ -43,12 +43,23 @@ const CountryCard = ({ country }) => {
         width: { xs: '345px', md: '264px' },
         height: '140px',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: darkMode ? '#2B3743' : '#F5F5F5',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         <CardMedia
           component="img"
           image={country.flag}
           alt={`Flag of ${country.name}`}
+          onError={(e) => {
+            console.error('Failed to load flag for', country.name, ':', country.flag);
+            e.target.style.display = 'none';
+          }}
+          onLoad={() => {
+            console.log('Successfully loaded flag for', country.name);
+          }}
           sx={{ 
             width: '100%',
             height: '100%',
@@ -58,6 +69,11 @@ const CountryCard = ({ country }) => {
             left: 0
           }}
         />
+        {!country.flag && (
+          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', p: 2 }}>
+            No flag available
+          </Typography>
+        )}
       </Box>
       <CardContent sx={{ 
         width: { xs: '313px', md: '232px' },
